@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}Game{% endblock %}
+
+{% block body %}
+<div class="container mt-5 px-40">
+    <h1 class="mb-6 text-3xl font-bold">Setting up the Gaming Session</h1>
+    <p id="loadingMessage" class="mb-4"><strong>Loading...</strong></p>
+    <form id="gameForm" action="/start_gameplay" method="post">
+        <button id="gameButton" type="submit"
+            class=" bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            >Play Game</button>
+    </form>
+    <!-- Add canvas element for the line chart -->
+    <canvas id="emotionLineChart" class="w-64 h-32 mt-4"></canvas>
+    <div id="realTimeUpdates" class="mt-4"></div>
+</div>
+
+<script>
+    // Wait for 5 seconds before enabling the form elements
+    setTimeout(function () {
+        // Enable the form elements
+        document.getElementById('loadingMessage').innerHTML = ''; // Remove loading message
+    }, 3000);
+</script>
+
+<!-- JavaScript code for real-time updates -->
+<script>
+    // Define color mapping for emotions
+    var emotionColors = [
+        'rgba(255, 0, 0, 1)',
+        'rgba(255, 192, 203, 1)',
+        'rgba(255, 255, 0, 1)',
+        'rgba(0, 128, 0, 1)',
+        'rgba(64, 64, 64, 1)',
+        'rgba(148, 0, 211, 1)'
+    ]
+
+    //    launch game
+    document.getElementById('gameForm').addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent the form from submitting in the usual way
+
+        // Make an AJAX request to start the game
+        fetch('/start_gameplay', {
+            method: 'POST',
+        })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Game started successfully');
+                    // You can add additional logic here, such as displaying a success message
+                } else {
+                    console.error('Error starting game:', response.statusText);
+                    // You can handle errors here, such as displaying an error message to the user
+                }
+            })
+            .catch(error => {
+                console.error('Error starting game:', error);
+                // You can handle errors here, such as displaying an error message to the user
+            });
+    });
+
+    // Initialize line chart
+    var ctx = document.getElementById('emotionLineChart').getContext('2d');
+    var lineChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [], // Initialize empty array for x-axis labels (time)
+            datasets: [] // Initialize empty array for datasets (emotion counts)
+        },
+        options: {
+            responsive: true,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+
+    // Function to fetch real-time data from server and update HTML element
+    function fetchAndUpdateRealTimeData() {
+        // Make an AJAX request to fetch real-time data
+        // Replace '/fetch_emotion_counts' with your actual backend endpoint
+        fetch('/fetch_emotion_counts')
+            .then(response => response.json())
+            .then(data => {
+                updateChartData(data);
+                // Construct HTML content to display emotion counts
+                let htmlContent = '<h2 class="mb-2 font-bold">Real-time Emotion Counts</h2>';
+                htmlContent += '<ul>';
+                for (let emotion in data) {
+                    htmlContent += `<li>${emotion}: ${data[emotion]}</li>`;
+                }
+                htmlContent += '</ul>';
+                htmlContent += '<br>';
+
+                // Update the content of the specified HTML element
+                document.getElementById('realTimeUpdates').innerHTML = htmlContent;
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    // Function to update line chart data
+    function updateChartData(data) {
+        // Update x-axis labels (time)
+        lineChart.data.labels.push(new Date().toLocaleTimeString());
+
+        // Update datasets (emotion counts)
+        for (let emotion in data) {
+            if (!lineChart.data.datasets.find(dataset => dataset.label === emotion)) {
+                lineChart.data.datasets.push({
+                    label: emotion,
+                    data: [],
+                    borderColor: emotionColors,
+                    fill: false
+                });
+            }
+            lineChart.data.datasets.find(dataset => dataset.label === emotion).data.push(data[emotion]);
+        }
+
+        // Limit number of data points to display
+        const maxDataPoints = 100;
+        if (lineChart.data.labels.length > maxDataPoints) {
+            lineChart.data.labels.shift(); // Remove oldest label
+            lineChart.data.datasets.forEach(dataset => {
+                dataset.data.shift(); // Remove oldest data point for each dataset
+            });
+        }
+
+        // Update chart
+        lineChart.update();
+    }
+
+    fetchAndUpdateRealTimeData();
+    var interval = setInterval(fetchAndUpdateRealTimeData, 3000);
+
+    // Function to stop fetching data after 60 seconds
+    function stopFetchingData() {
+        clearInterval(interval);
+    }
+
+    // Stop fetching data after 60 seconds
+    setTimeout(stopFetchingData, 30000);
+
+    function redirectToInsideGame() {
+    window.location.href = '/inside_game';
+}
+
+// Call redirectToInsideGame function after 60 seconds
+setTimeout(redirectToInsideGame, 35000);
+</script>
+{% endblock body %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block style %}
+
+{% endblock %}
+
+{% block body %}
+<!-- Landing Page Content -->
+<section class="py-16">
+    <div class="container max-w-screen-xl mx-auto px-4 mt-5">
+        <header class="flex flex-col lg:flex-row justify-between lg:mb-20">
+            <div class="text-center lg:text-left mb-20 lg:mb-0">
+                <div class="flex items-center justify-center lg:justify-start gap-2 mb-10">
+                    <span class="w-20 h-0.5 bg-indigo-700"></span>
+
+                    <p class="font-medium text-indigo-700 text-xl">Team 12</p>
+                </div>
+
+                <h1 class="font-bold text-gray-800 text-3xl md:text-5xl xl:text-6xl mb-10">
+                    Gamified Intervention for Stress Relief [GISR]<br />
+                </h1>
+
+                <h3 class="font-bold text-gray-600 text-1xl md:text-3xl xl:text-4xl mb-10">
+                    An Emotion-based Gaming Experience
+                </h3>
+
+                <p class="font-normal text-gray-500 text-sm md:text-md xl:text-lg mb-4">
+                    Join us on a journey to explore how gamification can influence
+                    emotional states.<br />
+                    Our real-time face recognition technology continuously monitors
+                    your emotions as you play.<br />
+                </p>
+
+                <a href="/quiz"
+                    class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg mt-2 inline-block transition duration-300 ease-in-out transform hover:scale-105">Let's
+                    take a quiz</a>
+
+                <hr class="text-gray-500 mt-5 mb-5" />
+            </div>
+        </header>
+    </div>
+</section>
+{% endblock body %}

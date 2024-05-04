@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+
+{% block title %}Session Report{% endblock %}
+
+{% block body %}
+<div class="container mx-auto px-40 py-8">
+    <h1 class="text-4xl font-bold mb-6">Session Report</h1>
+    <h2 class="text-xl font-bold mb-2">Hi {{ name }}!</h2>
+    <h3 class="font-semibold">Here is your session report</h3>
+    <!-- Quiz Data -->
+    <div class="mb-8 mt-4">
+        <h2 class="text-xl font-bold mb-2">Quiz Data</h2>
+        <p class>Your dominant emotion state is: <span class="text-blue-500 font-bold">{{ demo
+                }}</span></p>
+
+        <!-- Donut Chart for Emotion Scores -->
+        <canvas id="emotionDonutChart" class="w-1/3 h-64 mb-4"></canvas>
+        <input type="hidden" id="dgraphData1" value="{{ dgraph_json1 }}">
+
+    </div>
+
+    <div class="container mb-8 mt-4">
+        <h2 class="text-xl font-bold mb-2">Pre-Game Data</h2>
+        <p class>Duration: <span class="text-blue-500 font-bold">30s</span></p>
+
+        <!-- Donut Chart for Emotion Scores -->
+        <canvas id="emotionBarChart1" class="w-1/2 h-64 mb-4"></canvas>
+        <input type="hidden" id="dgraphData2" value="{{ dgraph_json2 }}">
+
+    </div>
+
+    <div class="mb-8 mt-4">
+        <h2 class="text-xl font-bold mb-2">In-Game Data</h2>
+        <p class>Duration: <span class="text-blue-500 font-bold">60s</span></p>
+
+        <!-- Donut Chart for Emotion Scores -->
+        <canvas id="emotionBarChart2" class="w-1/2 h-64 mb-4"></canvas>
+        <input type="hidden" id="dgraphData3" value="{{ dgraph_json3 }}">
+
+    </div>
+
+    <div class="mb-8 mt-4">
+        <h2 class="text-xl font-bold mb-2">Post-Game Data</h2>
+        <p class>Duration: <span class="text-blue-500 font-bold">30s</span></p>
+
+        <!-- Donut Chart for Emotion Scores -->
+        <canvas id="emotionBarChart3" class="w-1/2 h-32 mb-4"></canvas>
+        <input type="hidden" id="dgraphData4" value="{{ dgraph_json4 }}">
+
+    </div>
+
+</div>
+
+<script>
+    // Data from Firebase
+    const emotionData = JSON.parse(document.getElementById('dgraphData1').value);
+
+    // Get canvas context
+    var ctx = document.getElementById('emotionDonutChart').getContext('2d');
+
+    // Create donut chart
+    var emotionDonutChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: Object.keys(emotionData),
+            datasets: [{
+                label: 'Emotion Scores',
+                data: Object.values(emotionData),
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 206, 86, 0.5)',
+                    'rgba(75, 192, 192, 0.5)',
+                    'rgba(153, 102, 255, 0.5)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            cutout: '80%',
+            responsive: false,
+            plugins: {
+                legend: {
+                    position: 'right'
+                }
+            }
+        }
+    });
+</script>
+<script>
+    // Data from Firebase
+    const barChartData1 = JSON.parse(document.getElementById('dgraphData2').value);
+
+    // Get canvas context
+    var ctx = document.getElementById('emotionBarChart1').getContext('2d');
+
+    // Create bar chart
+    var emotionBarChart1 = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: Object.keys(barChartData1),
+            datasets: [{
+                label: 'Emotion Scores',
+                data: Object.values(barChartData1),
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 206, 86, 0.5)',
+                    'rgba(75, 192, 192, 0.5)',
+                    'rgba(153, 102, 255, 0.5)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+<script>
+    // Data from Firebase
+    const barChartData2 = JSON.parse(document.getElementById('dgraphData3').value);
+
+    // Get canvas context
+    var ctx = document.getElementById('emotionBarChart2').getContext('2d');
+
+    // Create bar chart
+    var emotionBarChart2 = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: Object.keys(barChartData2),
+            datasets: [{
+                label: 'Emotion Scores',
+                data: Object.values(barChartData2),
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 206, 86, 0.5)',
+                    'rgba(75, 192, 192, 0.5)',
+                    'rgba(153, 102, 255, 0.5)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+<script>
+    // Data from Firebase
+    const barChartData3 = JSON.parse(document.getElementById('dgraphData4').value);
+
+    // Get canvas context
+    var ctx = document.getElementById('emotionBarChart3').getContext('2d');
+
+    // Create bar chart
+    var emotionBarChart3 = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: Object.keys(barChartData3),
+            datasets: [{
+                label: 'Emotion Scores',
+                data: Object.values(barChartData3),
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 206, 86, 0.5)',
+                    'rgba(75, 192, 192, 0.5)',
+                    'rgba(153, 102, 255, 0.5)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+{% endblock body %}

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %} GISR</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.7.0/dist/alpine.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.28.0/feather.min.js"
+        integrity="sha512-7x3zila4t2qNycrtZ31HO0NnJr8kg2VI67YLoRSyi9hGhRN66FHYWr7Axa9Y1J9tGYHVBPqIjSE1ogHrJTz51g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+
+<body class="bg-gray-100">
+    <nav class="bg-gray-800 shadow-md" x-data="{ open: false }">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="rounded-lg">
+                    <a class="text-white mr-4 text-white font-bold px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-300"
+                        href="/">GISR</a>
+                </div>
+                <div class="md:hidden">
+                    <button @click="open = !open" class="text-white focus:outline-none focus:text-white">
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path x-show="!open" fill="currentColor"
+                                d="M4 6h16a1 1 0 110 2H4a1 1 0 110-2zM4 11h16a1 1 0 110 2H4a1 1 0 110-2zM4 16h16a1 1 0 110 2H4a1 1 0 110-2z" />
+                            <path x-show="open" fill="currentColor" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="hidden md:flex items-center">
+                    {% if logged_in %}
+                    <a href="/profile"
+                        class="flex text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-300">
+                        <i data-feather="user" class="mr-2"></i>{{
+                        user_email}}
+                    </a>
+                    <a href="/logout"
+                        class="text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-300">Logout</a>
+                    {% else %}
+                    <a href="/login"
+                        class="text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-300">Login</a>
+                    <a href="/signup"
+                        class="text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-300">Signup</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="md:hidden" x-show="open" @click.away="open = false">
+                <div class="pt-2 pb-3 space-y-1">
+                    {% if logged_in %}
+                    <div class="text-white px-4 py-2">
+                        <i class="fas fa-user mr-1"></i> {{ user_email }}
+                    </div>
+                    <a href="/logout"
+                        class="text-white block px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-300">Logout</a>
+                    {% else %}
+                    <a href="/login"
+                        class="text-white block px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-300">Login</a>
+                    <a href="/signup"
+                        class="text-white block px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors duration-300">Signup</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8">
+        {% block body %}{% endblock body %}
+    </div>
+    <footer class="bg-red-50 py-3 md:py-5 mt-auto">
+        <div class="container">
+            <div class="text-center">
+                <h1 class="font-medium text-gray-700 text-lg md:text-xl mb-2 md:mb-3">
+                    Contact us
+                </h1>
+
+                <p class="font-normal text-gray-400 text-xs md:text-sm mb-5">
+                    &copy; Gamified Intervention for Stress Relief [GISR] 2024
+                </p>
+
+                <div class="flex items-center justify-center space-x-3 md:space-x-5">
+                    <a href="#"
+                        class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-red-200 transition ease-in-out duration-300">
+                        <i data-feather="github"
+                            class="text-gray-500 hover:text-white transition ease-in-out duration-500"></i>
+                    </a>
+
+                    <a href="#"
+                        class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-red-200 transition ease-in-out duration-300">
+                        <i data-feather="at-sign"
+                            class="text-gray-500 hover:text-white transition ease-in-out duration-500"></i>
+                    </a>
+
+                    <a href="#"
+                        class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-red-200 transition ease-in-out duration-300">
+                        <i data-feather="book"
+                            class="text-gray-500 hover:text-white transition ease-in-out duration-500"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+        feather.replace();
+    </script>
+</body>
+
+</html>
