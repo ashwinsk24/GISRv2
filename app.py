@@ -1,13 +1,8 @@
 from flask import Flask, Response, jsonify, session, render_template, request, redirect, url_for
 import pyrebase
 import json
-import cv2
-from keras.models import model_from_json
-import uuid
 import numpy as np
 import os
-import subprocess
-import threading
 from dotenv import load_dotenv
 
 load_dotenv()
