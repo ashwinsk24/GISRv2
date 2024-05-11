@@ -274,6 +274,7 @@ def fetch_emotion_counts():
     global emotion_counts,name
 
     db.child(name).child('emotion').set(emotion_counts)
+    db.child(name).child('cemotion').set(emotion_counts)
     return jsonify(emotion_counts)
 
 @app.route('/start_game', methods=['POST'])
@@ -297,6 +298,7 @@ def game_in_progress():
     else:
         logged_in = False
         user_email = None
+        return redirect('/login')
     return render_template('game.html', logged_in=logged_in, user_email=user_email)
 
 
@@ -305,6 +307,7 @@ def fetch_emotion_counts_in_game():
     global emotion_counts,name
 
     db.child(name).child('emotioningame').set(emotion_counts)
+    db.child(name).child('cemotion').set(emotion_counts)
     return jsonify(emotion_counts)
 
 @app.route('/inside_game')
@@ -324,6 +327,7 @@ def fetch_emotion_counts_post_game():
     global emotion_counts,name
 
     db.child(name).child('emotionpostgame').set(emotion_counts)
+    db.child(name).child('cemotion').set(emotion_counts)
     return jsonify(emotion_counts)
 
 @app.route('/post_game')
@@ -396,4 +400,4 @@ def final_report():
  
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
