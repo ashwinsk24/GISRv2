@@ -5,12 +5,14 @@
 {% block body %}
 <div class="container mx-auto px-40 py-8">
     <h1 class="text-4xl font-bold mb-6">Session Report</h1>
-    <h2 class="text-xl font-bold mb-2">Hi {{ name }}!</h2>
-    <h3 class="font-semibold">Here is your session report</h3>
+    <h2 class="text-xl font-bold mb-2">Name: <span class="text-blue-500 font-bold"> {{ name
+            }}</span></h2>
+    <h3 class="font-semibold">Summary Report</h3>
     <!-- Quiz Data -->
     <div class="mb-8 mt-4">
         <h2 class="text-xl font-bold mb-2">Quiz Data</h2>
-        <p class>Your dominant emotion state is: <span class="text-blue-500 font-bold">{{ demo
+        <p class>{{ name
+            }}'s dominant emotion state is: <span class="text-blue-500 font-bold">{{ demo
                 }}</span></p>
 
         <!-- Donut Chart for Emotion Scores -->

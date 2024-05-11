@@ -4,151 +4,74 @@
 
 {% block body %}
 <div class="container mt-5 px-40">
-    <h1 class="mb-6 text-3xl font-bold">Setting up the Gaming Session</h1>
-    <p id="loadingMessage" class="mb-4"><strong>Loading...</strong></p>
-    <form id="gameForm" action="/start_gameplay" method="post">
-        <button id="gameButton" type="submit"
-            class=" bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            >Play Game</button>
-    </form>
-    <!-- Add canvas element for the line chart -->
-    <canvas id="emotionLineChart" class="w-64 h-32 mt-4"></canvas>
-    <div id="realTimeUpdates" class="mt-4"></div>
+    <h1 class="mb-6 text-3xl font-bold">Gaming Session Analysis</h1>
+
+    <a id="gameButton" type="submit" href="/final_report"
+        class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg mt-2 inline-block transition duration-300 ease-in-out transform hover:scale-105">See
+        Report</a>
+    <div class="container mb-8 mt-4">
+        <h2 class="text-xl font-bold mb-2">Game Analysis Data</h2>
+        <p class>Duration: <span class="text-blue-500 font-bold">120s</span></p>
+
+        <!-- Line Chart for Emotion Scores -->
+        <canvas id="emotionBarChart1" class="w-3/4 h-64 mb-4"></canvas>
+        <input type="hidden" id="dgraphData" value="{{ dgraph_json }}">
+
+    </div>
+
+
 </div>
 
 <script>
-    // Wait for 5 seconds before enabling the form elements
-    setTimeout(function () {
-        // Enable the form elements
-        document.getElementById('loadingMessage').innerHTML = ''; // Remove loading message
+    // Function to reload the graphs every 3 seconds
+    setInterval(function () {
+        // Reload the page to fetch new data
+        location.reload();
     }, 3000);
 </script>
 
-<!-- JavaScript code for real-time updates -->
 <script>
-    // Define color mapping for emotions
-    var emotionColors = [
-        'rgba(255, 0, 0, 1)',
-        'rgba(255, 192, 203, 1)',
-        'rgba(255, 255, 0, 1)',
-        'rgba(0, 128, 0, 1)',
-        'rgba(64, 64, 64, 1)',
-        'rgba(148, 0, 211, 1)'
-    ]
+    // Data from Firebase
+    const barChartData1 = JSON.parse(document.getElementById('dgraphData').value);
 
-    //    launch game
-    document.getElementById('gameForm').addEventListener('submit', function (event) {
-        event.preventDefault(); // Prevent the form from submitting in the usual way
+    // Get canvas context
+    var ctx = document.getElementById('emotionBarChart1').getContext('2d');
 
-        // Make an AJAX request to start the game
-        fetch('/start_gameplay', {
-            method: 'POST',
-        })
-            .then(response => {
-                if (response.ok) {
-                    console.log('Game started successfully');
-                    // You can add additional logic here, such as displaying a success message
-                } else {
-                    console.error('Error starting game:', response.statusText);
-                    // You can handle errors here, such as displaying an error message to the user
-                }
-            })
-            .catch(error => {
-                console.error('Error starting game:', error);
-                // You can handle errors here, such as displaying an error message to the user
-            });
-    });
-
-    // Initialize line chart
-    var ctx = document.getElementById('emotionLineChart').getContext('2d');
-    var lineChart = new Chart(ctx, {
+    // Create bar chart
+    var emotionBarChart1 = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: [], // Initialize empty array for x-axis labels (time)
-            datasets: [] // Initialize empty array for datasets (emotion counts)
+            labels: Object.keys(barChartData1),
+            datasets: [{
+                label: 'Emotion Scores',
+                data: Object.values(barChartData1),
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 206, 86, 0.5)',
+                    'rgba(75, 192, 192, 0.5)',
+                    'rgba(153, 102, 255, 0.5)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ],
+                borderWidth: 1
+            }]
         },
         options: {
-            responsive: true,
+            responsive: false,
             scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
+                y: {
+                    beginAtZero: true
+                }
             }
         }
     });
-
-    // Function to fetch real-time data from server and update HTML element
-    function fetchAndUpdateRealTimeData() {
-        // Make an AJAX request to fetch real-time data
-        // Replace '/fetch_emotion_counts' with your actual backend endpoint
-        fetch('/fetch_emotion_counts')
-            .then(response => response.json())
-            .then(data => {
-                updateChartData(data);
-                // Construct HTML content to display emotion counts
-                let htmlContent = '<h2 class="mb-2 font-bold">Real-time Emotion Counts</h2>';
-                htmlContent += '<ul>';
-                for (let emotion in data) {
-                    htmlContent += `<li>${emotion}: ${data[emotion]}</li>`;
-                }
-                htmlContent += '</ul>';
-                htmlContent += '<br>';
-
-                // Update the content of the specified HTML element
-                document.getElementById('realTimeUpdates').innerHTML = htmlContent;
-            })
-            .catch(error => console.error('Error:', error));
-    }
-
-    // Function to update line chart data
-    function updateChartData(data) {
-        // Update x-axis labels (time)
-        lineChart.data.labels.push(new Date().toLocaleTimeString());
-
-        // Update datasets (emotion counts)
-        for (let emotion in data) {
-            if (!lineChart.data.datasets.find(dataset => dataset.label === emotion)) {
-                lineChart.data.datasets.push({
-                    label: emotion,
-                    data: [],
-                    borderColor: emotionColors,
-                    fill: false
-                });
-            }
-            lineChart.data.datasets.find(dataset => dataset.label === emotion).data.push(data[emotion]);
-        }
-
-        // Limit number of data points to display
-        const maxDataPoints = 100;
-        if (lineChart.data.labels.length > maxDataPoints) {
-            lineChart.data.labels.shift(); // Remove oldest label
-            lineChart.data.datasets.forEach(dataset => {
-                dataset.data.shift(); // Remove oldest data point for each dataset
-            });
-        }
-
-        // Update chart
-        lineChart.update();
-    }
-
-    fetchAndUpdateRealTimeData();
-    var interval = setInterval(fetchAndUpdateRealTimeData, 3000);
-
-    // Function to stop fetching data after 60 seconds
-    function stopFetchingData() {
-        clearInterval(interval);
-    }
-
-    // Stop fetching data after 60 seconds
-    setTimeout(stopFetchingData, 30000);
-
-    function redirectToInsideGame() {
-    window.location.href = '/inside_game';
-}
-
-// Call redirectToInsideGame function after 60 seconds
-setTimeout(redirectToInsideGame, 35000);
 </script>
+
+
 {% endblock body %}

@@ -5,7 +5,8 @@
 {% block body %}
 <div class="container mt-5 px-40">
     <h1 class="mb-4 text-3xl font-bold text-center">Quiz Results</h1>
-    <p class="mb-2 text-center">Your dominant emotion state is: <span class="text-blue-500 font-bold">{{ dominant_emotion
+    <p class="mb-2 text-center">Your dominant emotion state is: <span class="text-blue-500 font-bold">{{
+            dominant_emotion
             }}</span></p>
 
     <!-- Canvas element for the chart -->
@@ -13,10 +14,10 @@
         <canvas id="emotionChart" class="w-full h-64 mb-4"></canvas>
     </div>
     <div class="text-center">
-        <form action="/start_game" method="post">
+        <form action="/game_in_progress" method="get">
             <button type="submit"
                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Start
-                Game</button>
+                Analysis</button>
         </form>
     </div>
 </div>

@@ -1,9 +1,6 @@
 # Gamified Intervention for Stress Relief [GISR]
 
-Join us on a journey to explore how gamification can influence
-emotional states.
-Our real-time face recognition technology continuously monitors
-your emotions as you play.
+Admin Dashboard
 
 ## Overview
 
@@ -33,7 +30,7 @@ In today's fast-paced world, stress has become a prevalent issue affecting peopl
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/ashwinsk24/GISRv2.git
+   git clone https://github.com/ashwinsk24/GISRv2-Admin.git
    ```
 
 2. Install dependencies:
@@ -50,9 +47,11 @@ In today's fast-paced world, stress has become a prevalent issue affecting peopl
 4. Run the Flask app:
 
    ```bash
-   flask run 
-   ``` 
+   flask run
+   ```
+
    or
+
    ```
    python app.py
    ```
@@ -71,10 +70,12 @@ In today's fast-paced world, stress has become a prevalent issue affecting peopl
 4. Monitor your emotion and stress levels and track your progress over time.
 
 ## Contributors
+
 - Farhan Naeem
 - Ashwin Sivasankaran Kolapadath
 - Catherine Jose
 - Bimal Dev S
 
 ## Contact
+
 For any queries mail us @[teamdottwelve@gmail.com](mailto:teamdottwelve@gmail.com)
