@@ -4,5 +4,6 @@
 # ignore ALL files in dir
 model/*
 game/*
+game_old/*
 
 .env
