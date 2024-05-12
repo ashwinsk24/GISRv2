@@ -344,7 +344,7 @@ def post_game():
 @app.route('/start_gameplay', methods=['POST'])
 def start_gameplay():
     try:
-        subprocess.Popen(['game\Depression.exe']) #game path
+        subprocess.Popen(['game\StackOBot.exe']) #game path
         return 'Game started successfully', 200
     except Exception as e:
         return f'Error starting game: {str(e)}', 500
