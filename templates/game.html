@@ -6,10 +6,12 @@
 <div class="container mt-5 px-40">
     <h1 class="mb-6 text-3xl font-bold">Setting up the Gaming Session</h1>
     <p id="loadingMessage" class="mb-4"><strong>Loading...</strong></p>
+    <p id="gameMessage" class="mb-4">Collect as many <strong>ORBS</strong> as possible.</p>
+
     <form id="gameForm" action="/start_gameplay" method="post">
         <button id="gameButton" type="submit"
-            class=" bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            >Play Game</button>
+            class=" bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Play
+            Game</button>
     </form>
     <!-- Add canvas element for the line chart -->
     <canvas id="emotionLineChart" class="w-64 h-32 mt-4"></canvas>
@@ -145,10 +147,10 @@
     setTimeout(stopFetchingData, 30000);
 
     function redirectToInsideGame() {
-    window.location.href = '/inside_game';
-}
+        window.location.href = '/inside_game';
+    }
 
-// Call redirectToInsideGame function after 60 seconds
-setTimeout(redirectToInsideGame, 35000);
+    // Call redirectToInsideGame function after 60 seconds
+    setTimeout(redirectToInsideGame, 35000);
 </script>
 {% endblock body %}
