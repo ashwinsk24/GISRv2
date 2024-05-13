@@ -31,7 +31,6 @@ db = firebase.database()
 app.secret_key = 'secret'
 name = ''
 
-
 @app.route('/', methods=['GET'])
 def index():
     if 'user' in session:
@@ -366,7 +365,7 @@ def profile():
 @app.route('/final_report',methods=['GET','POST'])
 def final_report():
 
-    global name
+    global name, emotion_counts
     if 'user' not in session:
         logged_in = False
         user_email = None
@@ -378,26 +377,28 @@ def final_report():
         quiz = db.child(name).child('quiz').child('data').get()
         dgraph1 = dict(quiz.val())
         dgraph_json1 = json.dumps(dgraph1)  
-        print(dgraph_json1)
+        #print(dgraph_json1)
 
         emopre = db.child(name).child('emotion').get()
         dgraph2 = dict(emopre.val())
         dgraph_json2 = json.dumps(dgraph2)  
-        print(dgraph_json2)
+        #print(dgraph_json2)
 
         inemo = db.child(name).child('emotioningame').get()
         dgraph3 = dict(inemo.val())
         dgraph_json3 = json.dumps(dgraph3)  
-        print(dgraph_json3)
+        #print(dgraph_json3)
 
         emopost = db.child(name).child('emotionpostgame').get()
         dgraph4 = dict(emopost.val())
         dgraph_json4 = json.dumps(dgraph4)  
-        print(dgraph_json4)
-
-
+        #print(dgraph_json4)
+    
+    #reset emotion_counts
+    emotion_counts = {'angry': 0, 'fear': 0, 'happy': 0, 'neutral': 0, 'sad': 0, 'surprise': 0}
+    # print(emotion_counts)
     return render_template('report.html', logged_in=logged_in, name = name, user_email=user_email,dgraph_json1=dgraph_json1,demo=demo,dgraph_json2=dgraph_json2,dgraph_json3=dgraph_json3,dgraph_json4=dgraph_json4)
  
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True)
